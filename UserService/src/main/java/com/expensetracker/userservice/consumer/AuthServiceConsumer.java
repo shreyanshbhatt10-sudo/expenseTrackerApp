@@ -1,5 +1,6 @@
 package com.expensetracker.userservice.consumer;
 
+import com.expensetracker.userservice.entities.UserInfo;
 import com.expensetracker.userservice.entities.UserInfoDto;
 import com.expensetracker.userservice.repository.UserRepository;
 import com.expensetracker.userservice.service.UserService;
@@ -8,20 +9,17 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 public class AuthServiceConsumer {
 
-    private UserService userService;
-    private UserRepository userRepository;
-
     @Autowired
-    AuthServiceConsumer(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
+    private UserService userService;
 
     @KafkaListener(topics = "${spring.kafka.topic-json.name}", groupId = "${spring.kafka.consumer.group-id}")
     public void listen(UserInfoDto eventData){
         try{
+            // Todo: Make it transactional, to handle idempotency and validate email, phoneNumber etc
             userService.createOrUpdateUser(eventData);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("AuthServiceConsumer: Exception is thrown while consuming kafka event");
         }
     }
 }

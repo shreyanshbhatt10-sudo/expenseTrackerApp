@@ -15,16 +15,16 @@ public class UserInfoProducer {
     private final KafkaTemplate<String, UserInfoDto> kafkaTemplate;
 
     @Value("${spring.kafka.topic-json.name}")
-    private String TOPIC_NAME;
+    private String topicJsonName;
 
     @Autowired
     UserInfoProducer(KafkaTemplate<String, UserInfoDto> kafkaTemplate){
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendEventToKafka(UserInfoDto userInfoDto){
-        Message<UserInfoDto> message = MessageBuilder.withPayload(userInfoDto)
-                .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME).build();
+    public void sendEventToKafka(UserInfoEvent eventData){
+        Message<UserInfoEvent> message = MessageBuilder.withPayload(eventData)
+                .setHeader(KafkaHeaders.TOPIC, topicJsonName).build();
         kafkaTemplate.send(message);
     }
 }
