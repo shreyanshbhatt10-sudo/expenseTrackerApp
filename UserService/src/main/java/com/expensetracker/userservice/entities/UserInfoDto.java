@@ -18,6 +18,9 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInfoDto {
 
+    private long id;
+
+    @Id
     @JsonProperty("user_id")
     @NonNull
     private String userId;
