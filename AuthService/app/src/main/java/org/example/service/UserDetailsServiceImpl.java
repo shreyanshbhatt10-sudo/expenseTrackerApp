@@ -6,6 +6,7 @@ import org.example.eventProducer.UserInfoEvent;
 import org.example.eventProducer.UserInfoProducer;
 import org.example.model.UserInfoDto;
 import org.example.repository.UserRepository;
+import org.example.utils.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -47,12 +48,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public Boolean signupUser(UserInfoDto userInfoDto){
         //Define a function to check if userEmail, password is correct
         //ValidationUtil.validateUser() //to do
-        userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
+        ValidationUtil.validateEmail(userInfoDto.getEmail());
+        ValidationUtil.validatePassword(userInfoDto.getPassword());
+
         if(Objects.nonNull(checkIfUserAlreadExists(userInfoDto))){
             return false;
         }
+
+        userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
+
         String userId = UUID.randomUUID().toString();
-        UserInfo userInfo = new UserInfo(userId, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>());
+        UserInfo userInfo = new UserInfo(
+                userId, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>());
+
         userRepository.save(userInfo);
         //push Event to Queue
         userInfoProducer.sendEventToKafka(userInfoEventToPublish(userInfoDto, userId));
