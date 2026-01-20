@@ -1,5 +1,7 @@
 package org.example.auth;
 import org.example.eventProducer.UserInfoProducer;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import lombok.Data;
 import org.example.repository.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,9 +38,10 @@ public class SecurityConfig {
     @Autowired
     private final UserInfoProducer userInfoProducer;
 
+
     @Bean
     @Autowired
-    public UserDetailsService userDetailsService (UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return new UserDetailsServiceImpl(userRepository, passwordEncoder, userInfoProducer);
     }
 
@@ -57,19 +61,17 @@ public class SecurityConfig {
                 .build();
     }
 
-
-
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsServiceImpl);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
+
     }
 
     @Bean
-    public AuthenticationManager authenticatonManager(AuthenticationConfiguration config) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }

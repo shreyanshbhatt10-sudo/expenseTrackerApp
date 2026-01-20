@@ -18,19 +18,26 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
-@Component
-@AllArgsConstructor
-@Data
+//@Component
+//@AllArgsConstructor
+//@Data
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
+
     private final UserRepository userRepository;
 
-    @Autowired
+
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+
     private final UserInfoProducer userInfoProducer;
+
+    // Standard Constructor for your @Bean method to use
+    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserInfoProducer userInfoProducer) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userInfoProducer = userInfoProducer;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
