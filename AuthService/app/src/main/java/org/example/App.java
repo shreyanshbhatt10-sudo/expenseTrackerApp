@@ -9,9 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = {"authService.repository"})
-@ComponentScan(basePackages = {"authService.controller", "authService.auth", "authService.service",
-        "authservice.eventProducer", "authservice.config"})
+@EnableJpaRepositories(basePackages = {"authservice.repository"})
 public class App {
 
     public static void main(String[] args) {

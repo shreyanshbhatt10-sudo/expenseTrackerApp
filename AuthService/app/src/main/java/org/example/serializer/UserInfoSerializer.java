@@ -12,6 +12,7 @@ import java.util.Map;
 public class UserInfoSerializer implements Serializer<UserInfoEvent> {
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
+
         Serializer.super.configure(configs, isKey);
     }
 
@@ -29,6 +30,7 @@ public class UserInfoSerializer implements Serializer<UserInfoEvent> {
 
     @Override
     public void close() {
+
         Serializer.super.close();
     }
 }
