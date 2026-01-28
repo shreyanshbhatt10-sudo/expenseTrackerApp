@@ -16,7 +16,7 @@ import java.util.function.UnaryOperator;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserInfoDto createOrUpdateUser(UserInfoDto userInfoDto){
         UnaryOperator<UserInfo> updatingUser = user -> {

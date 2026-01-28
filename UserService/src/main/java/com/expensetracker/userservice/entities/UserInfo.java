@@ -32,7 +32,7 @@ public class UserInfo {
 
     @JsonProperty("phone_number")
     @NonNull
-    private String phoneNumber;
+    private Long phoneNumber;
 
     @JsonProperty("email")
     @NonNull
